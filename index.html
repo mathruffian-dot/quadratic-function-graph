@@ -578,8 +578,8 @@
 
   async function vote(optId) {
     myVote = optId;
-    const data = {}; data[`votes.${userId}`] = optId; data.updated_at = serverTimestamp();
-    await setDoc(pollRef, data, { merge: true });
+    // 用巢狀物件 + merge：setDoc 不會把 "votes.xxx" 當巢狀欄位，必須寫成真正的巢狀 map
+    await setDoc(pollRef, { votes: { [userId]: optId }, updated_at: serverTimestamp() }, { merge: true });
   }
   onSnapshot(pollRef, snap => {
     const data = snap.data() || {}; const votes = data.votes || {};
