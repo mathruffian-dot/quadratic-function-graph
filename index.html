@@ -498,8 +498,9 @@
   const app = initializeApp(firebaseConfig);
   const fdb = getFirestore(app);
 
-  /* ---------- 文字雲 ---------- */
-  const wordsRef = collection(fdb, 'quad_wordcloud');
+  /* ---------- 文字雲 ----------
+     放在已開放規則的 rooms/ 底下（獨立房號 quad_graph_deck），免改安全規則 */
+  const wordsRef = collection(fdb, 'rooms', 'quad_graph_deck', 'words');
   const COLORS = ['#4fc3f7','#e8643a','#ffb74d','#81c784','#ce93d8','#80deea','#f48fb1'];
   let wcData = [];
 
@@ -554,7 +555,7 @@
     { id: 'c', label: 'y = (x−2)² + 3' },
     { id: 'd', label: 'y = −(x−2)² − 3' },
   ];
-  const pollRef = doc(fdb, 'quad_poll', 'results');
+  const pollRef = doc(fdb, 'rooms', 'quad_graph_deck', 'poll', 'results');
   const userId = 'user_' + Math.random().toString(36).slice(2, 9);
   let myVote = null;
 
