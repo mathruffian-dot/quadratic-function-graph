@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>二次函數圖形｜九年級數學</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css" />
+  <!-- 文字雲 -->
+  <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
+  <!-- QR code 產生器 -->
+  <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+  <!-- MathJax 數學公式 -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['\\(','\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async></script>
+  <style>
+    :root {
+      --accent:  #e8643a;   /* 橘紅 */
+      --accent2: #4fc3f7;   /* 青 */
+      --success: #81c784;   /* 綠 */
+      --warn:    #ffb74d;   /* 琥珀 */
+    }
+    .reveal { font-family: 'Segoe UI', 'Noto Sans TC', sans-serif; }
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Segoe UI', 'Noto Sans TC', sans-serif; font-weight: 700; letter-spacing: -0.02em;
+    }
+    .reveal h1 { font-size: 2.1em; }
+    .reveal h2 { font-size: 1.4em; color: var(--accent2); }
+    .reveal .progress { color: var(--accent); }
+
+    /* 封面 */
+    .title-slide { text-align: center; }
+    .title-slide .tag {
+      display: inline-block; background: var(--accent); color: #fff; padding: 4px 14px;
+      border-radius: 20px; font-size: 0.5em; letter-spacing: 0.08em; margin-bottom: 0.8em; font-weight: 600;
+    }
+    .title-slide .subtitle { font-size: 0.7em; color: #ccc; margin-top: 0.5em; }
+    .title-slide .author { margin-top: 1.5em; font-size: 0.45em; color: #888; }
+
+    /* 重點卡 */
+    .adv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 0.6em; }
+    .adv-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 0.6em; }
+    .adv-card {
+      background: rgba(255,255,255,0.05); border-top: 4px solid var(--accent2);
+      border-radius: 8px; padding: 16px; text-align: center;
+    }
+    .adv-card img { width: 64px; height: 64px; object-fit: contain; display: block; margin: 0 auto 8px;
+      filter: drop-shadow(0 0 10px rgba(79,195,247,0.6)); }
+    .adv-card .adv-title { font-size: 0.5em; font-weight: 700; color: var(--accent2); margin-bottom: 6px; }
+    .adv-card .adv-desc { font-size: 0.4em; color: #bbb; line-height: 1.6; }
+
+    /* 即時繪圖器版面 */
+    .plot-wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; align-items: center; margin-top: 0.4em; }
+    .plot-canvas {
+      width: 100%; background: #0a0e15; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px; display: block;
+    }
+    .plot-panel { text-align: left; }
+    .live-eq {
+      font-size: 0.7em; font-weight: 700; color: #fff; background: rgba(79,195,247,0.12);
+      border: 1px solid rgba(79,195,247,0.35); border-radius: 10px; padding: 12px 16px;
+      text-align: center; margin-bottom: 14px; font-family: 'Cambria Math', 'Times New Roman', serif;
+    }
+    .live-eq sup { font-size: 0.7em; }
+    .ctrl-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; font-size: 0.4em; }
+    .ctrl-row label { flex: 0 0 56px; color: var(--accent2); font-weight: 700; }
+    .ctrl-row input[type=range] { flex: 1; accent-color: var(--accent2); cursor: pointer; }
+    .ctrl-row .val { flex: 0 0 44px; text-align: right; color: var(--accent); font-weight: 700; }
+    .plot-info { font-size: 0.38em; color: #cfcfcf; line-height: 1.9; margin-top: 12px;
+      background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px 14px; }
+    .plot-info b { color: var(--warn); }
+
+    /* 整理表 */
+    .reveal table { font-size: 0.5em; }
+    .reveal table th { color: var(--accent2); }
+    .reveal table td, .reveal table th { border-color: rgba(255,255,255,0.15); }
+
+    /* 互動頁 QR */
+    .qr-box { background: #fff; padding: 10px; border-radius: 10px; display: inline-block; }
+    .qr-box img, .qr-box canvas { display: block; }
+    .qr-cap { font-size: 0.32em; color: #aaa; text-align: center; margin-top: 6px; line-height: 1.5; }
+
+    /* 結語 */
+    .end-slide { text-align: center; }
+    .end-slide .big { font-size: 2.6em; filter: drop-shadow(0 0 24px rgba(79,195,247,0.7)); }
+    .conclusion-card { background: rgba(79,195,247,0.1); border: 1px solid rgba(79,195,247,0.3);
+      border-radius: 10px; padding: 16px; font-size: 0.42em; text-align: left; }
+    .conclusion-card ul { list-style: none; padding: 0; margin: 0; color: #ddd; line-height: 1.9; }
+    .conclusion-card ul li::before { content: "→ "; color: var(--accent); }
+
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ① 封面 -->
+    <section data-background-image="images/cover.png" data-background-opacity="0.4" data-background-size="cover">
+      <div class="title-slide">
+        <div class="tag">九年級上 · 數學</div>
+        <h1>二次函數的圖形</h1>
+        <h2 style="color:var(--accent); margin-top:0.2em;">拋物線的開口、平移與頂點</h2>
+        <p class="subtitle">拖動滑桿，親手操控圖形的變化 🎢</p>
+        <div style="margin-top:1.2em;">
+          <div class="qr-box" id="qr-cover" style="width:104px;height:104px;"></div>
+          <div class="qr-cap">用手機掃描<br>跟著一起操作</div>
+        </div>
+        <p class="author">互動式 Reveal.js 教學簡報</p>
+      </div>
+    </section>
+
+    <!-- ② 破冰文字雲 -->
+    <section id="slide-wordcloud">
+      <h2 style="font-size:1.05em; margin-bottom:0.3em;">💬 生活中你在哪裡看過「拋物線」？</h2>
+      <div style="display:grid; grid-template-columns:230px 1fr 150px; gap:14px; height:440px;">
+        <!-- 輸入 + 排行 -->
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="background:rgba(255,255,255,0.06); border-radius:10px; padding:14px;">
+            <div style="font-size:0.36em; color:var(--accent2); font-weight:700; margin-bottom:8px;">輸入你的答案</div>
+            <input id="wc-input" type="text" placeholder="例：噴水池、彩虹…" maxlength="20"
+              style="width:100%; padding:8px 12px; border-radius:8px; border:1px solid rgba(79,195,247,0.3);
+                     background:rgba(255,255,255,0.08); color:#fff; font-size:13px; box-sizing:border-box; font-family:inherit; outline:none;" />
+            <button id="wc-btn"
+              style="width:100%; margin-top:8px; padding:9px; background:var(--accent2); color:#0d1117;
+                     border:none; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer;">送出 ↵</button>
+          </div>
+          <div style="background:rgba(255,255,255,0.06); border-radius:10px; padding:14px; flex:1; overflow:hidden; display:flex; flex-direction:column;">
+            <div style="font-size:0.36em; color:var(--accent2); font-weight:700; margin-bottom:8px;">
+              熱門答案
+              <span style="display:inline-block; background:#ff4757; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.85em; animation:pulse 1.5s infinite;">LIVE</span>
+            </div>
+            <div id="wc-list" style="font-size:0.32em; overflow-y:auto; flex:1; color:#ccc;"></div>
+            <div style="margin-top:8px; font-size:0.3em; color:#666; border-top:1px solid rgba(255,255,255,0.08); padding-top:6px;">
+              總提交：<span id="wc-total" style="color:var(--accent); font-weight:700;">0</span>
+              不同：<span id="wc-unique" style="color:var(--accent2); font-weight:700;">0</span>
+            </div>
+          </div>
+        </div>
+        <!-- 文字雲 -->
+        <div style="background:rgba(255,255,255,0.04); border-radius:12px; overflow:hidden; position:relative; border:1px solid rgba(255,255,255,0.07);">
+          <canvas id="wc-canvas" style="width:100%; height:100%; display:block;"></canvas>
+          <div id="wc-empty" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#444; font-size:0.4em; text-align:center; pointer-events:none; line-height:2;">
+            輸入第一個答案<br>文字雲就會出現 ✨
+          </div>
+        </div>
+        <!-- QR -->
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <div class="qr-box" id="qr-wc" style="width:130px;height:130px;"></div>
+          <div class="qr-cap">掃描用手機<br>一起丟答案</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ 複習定義 -->
+    <section>
+      <h2>先複習：什麼是二次函數？</h2>
+      <div style="font-size:0.62em; margin:0.4em 0;">
+        \( y = ax^2 + bx + c \quad (a \neq 0) \)
+      </div>
+      <div class="adv-grid-2" style="margin-top:0.6em;">
+        <div class="conclusion-card">
+          <ul>
+            <li>最高次方是 <b style="color:var(--accent2)">二次</b>，所以叫「二次函數」</li>
+            <li>\(a\) 一定不能是 0（否則就變一次函數）</li>
+          </ul>
+        </div>
+        <div class="conclusion-card" style="background:rgba(232,100,58,0.1); border-color:rgba(232,100,58,0.3);">
+          <ul>
+            <li>它的圖形是一條 <b style="color:var(--accent)">拋物線</b></li>
+            <li>本課重點：\(a\)、\(h\)、\(k\) 怎麼影響這條拋物線</li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size:0.42em; color:#888; margin-top:1em;">👉 接下來每一頁，你都可以拖滑桿親手改變圖形！</p>
+    </section>
+
+    <!-- ④ y = ax² -->
+    <section id="slide-plot-a">
+      <h2>最基本的 \( y = ax^2 \)</h2>
+      <div class="plot-wrap">
+        <canvas id="cv-a" class="plot-canvas" width="720" height="480"></canvas>
+        <div class="plot-panel">
+          <div class="live-eq" id="eq-a"></div>
+          <div class="ctrl-row">
+            <label>a =</label>
+            <input id="sl-a" type="range" min="-3" max="3" step="0.5" value="1">
+            <span class="val" id="val-a">1</span>
+          </div>
+          <div class="plot-info" id="info-a"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑤ a 的意義整理 [ICON] -->
+    <section>
+      <h2>a 決定了什麼？</h2>
+      <div class="adv-grid">
+        <div class="adv-card">
+          <img src="images/icon_up.png" alt="">
+          <div class="adv-title">a &gt; 0：開口向上</div>
+          <div class="adv-desc">拋物線像微笑 😊，有最低點</div>
+        </div>
+        <div class="adv-card" style="border-top-color:var(--accent);">
+          <img src="images/icon_down.png" alt="">
+          <div class="adv-title" style="color:var(--accent);">a &lt; 0：開口向下</div>
+          <div class="adv-desc">拋物線像難過 🙁，有最高點</div>
+        </div>
+        <div class="adv-card">
+          <img src="images/icon_axis.png" alt="">
+          <div class="adv-title">|a| 越大</div>
+          <div class="adv-desc">開口越「窄」、越陡</div>
+        </div>
+        <div class="adv-card" style="border-top-color:var(--warn);">
+          <img src="images/icon_vertex.png" alt="">
+          <div class="adv-title" style="color:var(--warn);">|a| 越小</div>
+          <div class="adv-desc">開口越「寬」、越平緩</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ y = ax² + k 上下平移 -->
+    <section id="slide-plot-k">
+      <h2>上下平移：\( y = x^2 + k \)</h2>
+      <div class="plot-wrap">
+        <canvas id="cv-k" class="plot-canvas" width="720" height="480"></canvas>
+        <div class="plot-panel">
+          <div class="live-eq" id="eq-k"></div>
+          <div class="ctrl-row">
+            <label>k =</label>
+            <input id="sl-k" type="range" min="-6" max="6" step="1" value="0">
+            <span class="val" id="val-k">0</span>
+          </div>
+          <div class="plot-info" id="info-k"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ y = (x-h)² 左右平移 -->
+    <section id="slide-plot-h">
+      <h2>左右平移：\( y = (x-h)^2 \)</h2>
+      <div class="plot-wrap">
+        <canvas id="cv-h" class="plot-canvas" width="720" height="480"></canvas>
+        <div class="plot-panel">
+          <div class="live-eq" id="eq-h"></div>
+          <div class="ctrl-row">
+            <label>h =</label>
+            <input id="sl-h" type="range" min="-6" max="6" step="1" value="0">
+            <span class="val" id="val-h">0</span>
+          </div>
+          <div class="plot-info" id="info-h"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑧ 頂點式 y = a(x-h)² + k（核心） -->
+    <section id="slide-plot-full">
+      <h2>頂點式 \( y = a(x-h)^2 + k \) 🎯</h2>
+      <div class="plot-wrap">
+        <canvas id="cv-full" class="plot-canvas" width="720" height="480"></canvas>
+        <div class="plot-panel">
+          <div class="live-eq" id="eq-full"></div>
+          <div class="ctrl-row"><label>a =</label><input id="sl-fa" type="range" min="-3" max="3" step="0.5" value="1"><span class="val" id="val-fa">1</span></div>
+          <div class="ctrl-row"><label>h =</label><input id="sl-fh" type="range" min="-6" max="6" step="1" value="0"><span class="val" id="val-fh">0</span></div>
+          <div class="ctrl-row"><label>k =</label><input id="sl-fk" type="range" min="-6" max="6" step="1" value="0"><span class="val" id="val-fk">0</span></div>
+          <div class="plot-info" id="info-full"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑨ 重點整理表 -->
+    <section>
+      <h2>頂點式的重點整理</h2>
+      <p style="font-size:0.55em; margin:0.2em 0 0.5em;">\( y = a(x-h)^2 + k \)</p>
+      <table>
+        <thead>
+          <tr><th>性質</th><th>結果</th><th>說明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>頂點</td><td>\((h,\ k)\)</td><td>拋物線的最低／最高點</td></tr>
+          <tr><td>對稱軸</td><td>\(x = h\)</td><td>通過頂點的鉛直線</td></tr>
+          <tr><td>開口方向</td><td>a&gt;0 向上 / a&lt;0 向下</td><td>決定有最小或最大值</td></tr>
+          <tr><td>最小值</td><td>a&gt;0 時為 \(k\)</td><td>當 \(x=h\) 時 y 最小</td></tr>
+          <tr><td>最大值</td><td>a&lt;0 時為 \(k\)</td><td>當 \(x=h\) 時 y 最大</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ⑩ 課堂小測（投票） -->
+    <section id="slide-poll">
+      <h2>🗳️ 小試身手</h2>
+      <p style="font-size:0.5em; color:#ddd; margin:0.2em 0 0.4em;">
+        一條拋物線頂點在 \((2,-3)\) 且開口向上，下列哪個方程式正確？
+      </p>
+      <div style="display:grid; grid-template-columns:1fr 150px; gap:20px; align-items:center;">
+        <div id="poll-options" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div class="qr-box" id="qr-poll" style="width:130px;height:130px;"></div>
+          <div class="qr-cap">掃描用手機<br>投下你的答案</div>
+        </div>
+      </div>
+      <div style="font-size:0.36em; color:#666; text-align:center; margin-top:0.6em;">已作答：<span id="poll-total">0</span> 人</div>
+    </section>
+
+    <!-- ⑪ 結語 -->
+    <section data-background-image="images/ending.png" data-background-opacity="0.45" data-background-size="cover">
+      <div class="end-slide">
+        <div class="big">📈</div>
+        <h1 style="color:var(--accent2);">重點回顧</h1>
+        <div class="conclusion-card" style="max-width:70%; margin:0.8em auto 0;">
+          <ul>
+            <li><b style="color:var(--accent)">a</b>：開口方向（正上負下）與寬窄</li>
+            <li><b style="color:var(--accent)">h</b>：左右平移，對稱軸 \(x=h\)</li>
+            <li><b style="color:var(--accent)">k</b>：上下平移，頂點 \((h,k)\)</li>
+          </ul>
+        </div>
+        <p style="font-size:0.5em; color:#aaa; margin-top:1em;">把握住 a、h、k，任何拋物線你都畫得出來！</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true, transition: 'slide', backgroundTransition: 'fade',
+    center: true, progress: true, controls: true, slideNumber: 'c/t', plugins: []
+  });
+</script>
+
+<!-- === Canvas 即時拋物線繪圖器 === -->
+<script>
+(function() {
+  const UNIT = 40;            // 每單位 40px
+  const XMIN = -9, XMAX = 9;  // x 範圍（配合 720px 寬）
+
+  function fmtA(a) { return a === 1 ? '' : (a === -1 ? '−' : a); }
+  function signed(v) { return v >= 0 ? ' + ' + v : ' − ' + Math.abs(v); }
+
+  // 在 canvas 上畫座標格與拋物線 y = a(x-h)^2 + k
+  function draw(cv, a, h, k) {
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const ox = W / 2, oy = H / 2;             // 原點像素位置
+    const mX = x => ox + x * UNIT;
+    const mY = y => oy - y * UNIT;
+    ctx.clearRect(0, 0, W, H);
+
+    // 格線
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.beginPath();
+    for (let x = XMIN; x <= XMAX; x++) { ctx.moveTo(mX(x), 0); ctx.lineTo(mX(x), H); }
+    for (let y = -6; y <= 6; y++) { ctx.moveTo(0, mY(y)); ctx.lineTo(W, mY(y)); }
+    ctx.stroke();
+
+    // 對稱軸 x = h（虛線）
+    if (a !== 0) {
+      ctx.save();
+      ctx.setLineDash([6, 6]);
+      ctx.strokeStyle = 'rgba(255,183,77,0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(mX(h), 0); ctx.lineTo(mX(h), H); ctx.stroke();
+      ctx.restore();
+    }
+
+    // 坐標軸
+    ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+    // 軸刻度數字
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+    for (let x = XMIN + 1; x <= XMAX - 1; x += 2) if (x !== 0) ctx.fillText(x, mX(x), oy + 15);
+    ctx.textAlign = 'left';
+    for (let y = -6; y <= 6; y += 2) if (y !== 0) ctx.fillText(y, ox + 5, mY(y) + 4);
+
+    if (a === 0) return;
+
+    // 拋物線
+    ctx.strokeStyle = a > 0 ? '#4fc3f7' : '#e8643a';
+    ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 10;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    let started = false;
+    for (let px = 0; px <= W; px++) {
+      const x = (px - ox) / UNIT;
+      const y = a * (x - h) * (x - h) + k;
+      const py = mY(y);
+      if (py < -50 || py > H + 50) { started = false; continue; }
+      if (!started) { ctx.moveTo(px, py); started = true; } else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // 頂點
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(mX(h), mY(k), 5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#ffb74d'; ctx.lineWidth = 2; ctx.stroke();
+  }
+
+  // 設定每個繪圖器
+  const plots = [
+    { cv:'cv-a', sliders:{a:'sl-a'}, fixed:{h:0,k:0}, vals:{a:'val-a'}, eq:'eq-a', info:'info-a', kind:'a' },
+    { cv:'cv-k', sliders:{k:'sl-k'}, fixed:{a:1,h:0}, vals:{k:'val-k'}, eq:'eq-k', info:'info-k', kind:'k' },
+    { cv:'cv-h', sliders:{h:'sl-h'}, fixed:{a:1,k:0}, vals:{h:'val-h'}, eq:'eq-h', info:'info-h', kind:'h' },
+    { cv:'cv-full', sliders:{a:'sl-fa',h:'sl-fh',k:'sl-fk'}, fixed:{}, vals:{a:'val-fa',h:'val-fh',k:'val-fk'}, eq:'eq-full', info:'info-full', kind:'full' },
+  ];
+
+  const registry = {};
+
+  function render(p) {
+    const get = key => p.sliders[key] ? parseFloat(document.getElementById(p.sliders[key]).value) : p.fixed[key];
+    const a = get('a'), h = get('h'), k = get('k');
+    // 更新數值顯示
+    for (const key in p.vals) document.getElementById(p.vals[key]).textContent = parseFloat(document.getElementById(p.sliders[key]).value);
+    // 即時方程式
+    const eqEl = document.getElementById(p.eq);
+    if (p.kind === 'a') eqEl.innerHTML = (a === 0) ? 'a 不可為 0！' : `y = ${fmtA(a)}x<sup>2</sup>`;
+    else if (p.kind === 'k') eqEl.innerHTML = `y = x<sup>2</sup>${k === 0 ? '' : signed(k)}`;
+    else if (p.kind === 'h') eqEl.innerHTML = `y = (x${h === 0 ? '' : (h > 0 ? ' − ' + h : ' + ' + Math.abs(h))})<sup>2</sup>`;
+    else eqEl.innerHTML = (a === 0) ? 'a 不可為 0！' : `y = ${fmtA(a)}(x${h === 0 ? '' : (h > 0 ? '−' + h : '+' + Math.abs(h))})<sup>2</sup>${k === 0 ? '' : signed(k)}`;
+    // 說明
+    const infoEl = document.getElementById(p.info);
+    if (infoEl) {
+      if (a === 0) { infoEl.innerHTML = '⚠️ 二次函數的 <b>a 不能等於 0</b>，把滑桿移開 0 看看！'; }
+      else {
+        const dir = a > 0 ? '開口向上 ↑（有最小值）' : '開口向下 ↓（有最大值）';
+        const ext = a > 0 ? `最小值 = <b>${k}</b>` : `最大值 = <b>${k}</b>`;
+        infoEl.innerHTML = `開口方向：<b>${dir}</b><br>頂點：<b>(${h}, ${k})</b>　對稱軸：<b>x = ${h}</b><br>${ext}（當 x = ${h}）`;
+      }
+    }
+    draw(document.getElementById(p.cv), a, h, k);
+  }
+
+  plots.forEach(p => {
+    if (!document.getElementById(p.cv)) return;
+    registry[p.cv] = () => render(p);
+    for (const key in p.sliders) {
+      document.getElementById(p.sliders[key]).addEventListener('input', () => render(p));
+    }
+    render(p);
+  });
+
+  // 切換到含繪圖器的頁面時重畫（canvas 在隱藏時尺寸可能異常）
+  Reveal.on('slidechanged', e => {
+    const id = e.currentSlide?.id || '';
+    const map = { 'slide-plot-a':'cv-a', 'slide-plot-k':'cv-k', 'slide-plot-h':'cv-h', 'slide-plot-full':'cv-full' };
+    if (map[id] && registry[map[id]]) setTimeout(registry[map[id]], 60);
+  });
+})();
+</script>
+
+<!-- === QR code（依部署後實際網址即時產生） === -->
+<script>
+(function() {
+  const base = location.origin + location.pathname;
+  function makeQR(elId, hash) {
+    const el = document.getElementById(elId);
+    if (!el || typeof QRCode === 'undefined') return;
+    el.innerHTML = '';
+    new QRCode(el, {
+      text: base + (hash || ''),
+      width: el.clientWidth || 120, height: el.clientHeight || 120,
+      colorDark: '#0d1117', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+  // 等 Reveal / DOM 就緒
+  window.addEventListener('load', () => {
+    makeQR('qr-cover', '');        // 整份簡報
+    makeQR('qr-wc', '#/1');        // 文字雲頁（第 2 張，索引 1）
+    makeQR('qr-poll', '#/9');      // 投票頁（第 10 張，索引 9）
+  });
+})();
+</script>
+
+<!-- === Firebase 共用設定（my-teaching-tools） === -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+  import {
+    getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy,
+    doc, setDoc
+  } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBfhfjELufcQVwXQPhxYe9ll7UbIIOQfNY",
+    authDomain: "my-teaching-tools.firebaseapp.com",
+    projectId: "my-teaching-tools",
+    storageBucket: "my-teaching-tools.firebasestorage.app",
+    messagingSenderId: "257256401647",
+    appId: "1:257256401647:web:9db61fe50e7f22274cc91a"
+  };
+  const app = initializeApp(firebaseConfig);
+  const fdb = getFirestore(app);
+
+  /* ---------- 文字雲 ---------- */
+  const wordsRef = collection(fdb, 'quad_wordcloud');
+  const COLORS = ['#4fc3f7','#e8643a','#ffb74d','#81c784','#ce93d8','#80deea','#f48fb1'];
+  let wcData = [];
+
+  window.wcSubmit = async function() {
+    const input = document.getElementById('wc-input');
+    const word = input.value.trim();
+    if (!word) return;
+    const btn = document.getElementById('wc-btn'); btn.disabled = true;
+    try { await addDoc(wordsRef, { word, created_at: serverTimestamp() }); input.value = ''; }
+    catch (e) { console.error(e); } finally { btn.disabled = false; }
+  };
+  document.getElementById('wc-input')?.addEventListener('keypress', e => { if (e.key === 'Enter') window.wcSubmit(); });
+  document.getElementById('wc-btn')?.addEventListener('click', window.wcSubmit);
+
+  onSnapshot(query(wordsRef, orderBy('created_at', 'asc')), snap => {
+    const words = []; snap.forEach(d => words.push(d.data().word));
+    const counts = {}; words.forEach(w => counts[w] = (counts[w] || 0) + 1);
+    wcData = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    document.getElementById('wc-total').textContent = words.length;
+    document.getElementById('wc-unique').textContent = wcData.length;
+    const listEl = document.getElementById('wc-list');
+    listEl.innerHTML = wcData.slice(0, 12).map(([w, c]) =>
+      `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span>${w}</span><span style="color:var(--accent);font-weight:700;">${c}</span></div>`).join('')
+      || '<div style="color:#555;padding:8px 0;">尚無資料</div>';
+    const empty = document.getElementById('wc-empty'); if (empty) empty.style.display = wcData.length > 0 ? 'none' : '';
+    drawWordCloud();
+  });
+
+  function drawWordCloud() {
+    const canvas = document.getElementById('wc-canvas');
+    if (!canvas || typeof WordCloud === 'undefined') return;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width < 10 || rect.height < 10) return;
+    canvas.width = rect.width; canvas.height = rect.height;
+    if (wcData.length === 0) return;
+    const maxCount = wcData[0][1];
+    WordCloud(canvas, {
+      list: wcData.map(([w, c]) => [w, Math.max(18, Math.round((c / maxCount) * 76))]),
+      gridSize: 6, weightFactor: 1,
+      fontFamily: '"Microsoft JhengHei", "Noto Sans TC", sans-serif',
+      color: () => COLORS[Math.floor(Math.random() * COLORS.length)],
+      backgroundColor: 'transparent', rotateRatio: 0.3, shuffle: true,
+    });
+  }
+  Reveal.on('slidechanged', e => { if (e.currentSlide?.id === 'slide-wordcloud') setTimeout(drawWordCloud, 150); });
+
+  /* ---------- 投票 ---------- */
+  const OPTIONS = [
+    { id: 'a', label: 'y = (x−2)² − 3' },
+    { id: 'b', label: 'y = (x+2)² − 3' },
+    { id: 'c', label: 'y = (x−2)² + 3' },
+    { id: 'd', label: 'y = −(x−2)² − 3' },
+  ];
+  const pollRef = doc(fdb, 'quad_poll', 'results');
+  const userId = 'user_' + Math.random().toString(36).slice(2, 9);
+  let myVote = null;
+
+  const container = document.getElementById('poll-options');
+  OPTIONS.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.id = `poll-btn-${opt.id}`;
+    btn.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="flex:0 0 24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;" id="poll-check-${opt.id}"></span>
+        <span style="flex:1;text-align:left;">${opt.label}</span>
+        <span style="flex:0 0 110px;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;">
+          <div id="poll-bar-${opt.id}" style="height:100%;width:0;background:var(--accent2);border-radius:4px;transition:width 0.4s;"></div></span>
+        <span id="poll-pct-${opt.id}" style="flex:0 0 36px;text-align:right;font-size:0.75em;color:#888;">0%</span>
+      </div>`;
+    btn.style.cssText = `width:100%;padding:11px 15px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-size:0.46em;cursor:pointer;font-family:inherit;text-align:left;`;
+    btn.onclick = () => vote(opt.id);
+    container.appendChild(btn);
+  });
+
+  async function vote(optId) {
+    myVote = optId;
+    const data = {}; data[`votes.${userId}`] = optId; data.updated_at = serverTimestamp();
+    await setDoc(pollRef, data, { merge: true });
+  }
+  onSnapshot(pollRef, snap => {
+    const data = snap.data() || {}; const votes = data.votes || {};
+    const counts = {}; OPTIONS.forEach(o => counts[o.id] = 0);
+    Object.values(votes).forEach(v => { if (counts[v] !== undefined) counts[v]++; });
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    document.getElementById('poll-total').textContent = total;
+    OPTIONS.forEach(opt => {
+      const pct = total > 0 ? Math.round((counts[opt.id] / total) * 100) : 0;
+      document.getElementById(`poll-bar-${opt.id}`).style.width = pct + '%';
+      document.getElementById(`poll-pct-${opt.id}`).textContent = pct + '%';
+      const check = document.getElementById(`poll-check-${opt.id}`);
+      if (myVote === opt.id) { check.textContent = '✓'; check.style.background = 'var(--accent2)'; check.style.borderColor = 'var(--accent2)'; }
+    });
+  });
+</script>
+
+</body>
+</html>
